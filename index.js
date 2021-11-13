@@ -27,6 +27,7 @@ async function run() {
         const bikeCollection = database.collection('bikes');
         const usersCollection = database.collection('users');
         const ordersCollection = database.collection('orders');
+        const reviewsCollection = database.collection('reviews');
 
 
         // get API ----------------------
@@ -64,6 +65,13 @@ async function run() {
             res.send(orders);
         })
 
+        // load reviews ------------
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewsCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        })
+
 
 
         // POST api------------------------------
@@ -84,10 +92,20 @@ async function run() {
             res.json(result);
         })
 
+        // post API -------------------------
         app.post('/orders', async (req, res) => {
             const orderInfo = req.body;
             console.log(orderInfo);
             const result = await ordersCollection.insertOne(orderInfo);
+            console.log(result);
+            res.json(result);
+        });
+
+        // post API -------------------------
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            console.log(review);
+            const result = await reviewsCollection.insertOne(review);
             console.log(result);
             res.json(result);
         });
